@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The input pattern attribute</h1>
+
+<form action="">
+  <label for="country_code">Kokonais- tai desimaaliluku:</label>
+  <input type="text" id="country_code" name="country_code" required
+   pattern="[0-9]+[.,]?[0-9]{0,3}" title="Three letter country code"><br><br>
+  <input type="submit">
+  <div class="invalid-feedback"></div>
+</form>
+
+<p><strong>Note:</strong> The pattern attribute of the input tag is not supported in Safari 10 (or earlier).</p>
+
+</body>
+</html>

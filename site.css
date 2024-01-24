@@ -1,0 +1,9 @@
+ol {
+    /* Väliviiva */
+    list-style-type:hyphen;     
+}
+
+li span {
+    color: #999999;
+    margin-left: 1em;
+}
