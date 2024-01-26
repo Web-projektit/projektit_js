@@ -14,6 +14,7 @@
    axios.delete(url) 
 */
 
+/* Pohdintaa: miksi tässä ei tarvita async/await -rakennetta? */
 let haeresponse = response => {
     if (!response.ok) {
         if (response.status === 404) {
@@ -92,5 +93,122 @@ let muutos = {"important": true}
 /* fetch_get(url,id) 
 fetch_post(url,rivi) 
 fetch_put(url,rivi,4) 
-fetch_patch(url,muutos,4) */
-fetch_delete(url,4)
+fetch_patch(url,muutos,4) 
+fetch_delete(url,4) */
+
+let async_get = async (url,id) => {
+    if (id) url = url + "/" + id
+    try {
+        const response = await fetch(url)
+        const data = await haeresponse(response)
+        console.log("async_get:",data)
+        return data
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+}
+
+let async_post = async (url,rivi) => {
+    try {
+        const response = await fetch(url,{
+            body: JSON.stringify(rivi), 
+            method: "POST", 
+            headers: { "Content-type": "application/json ; charset=UTF-8" }
+            })
+        const data = await haeresponse(response)
+        console.log(data)
+        return data
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+}
+
+let async_put = async (url,rivi,id) => {
+    url = url + "/" + id
+    try {
+        const response = await fetch(url,{
+            body: JSON.stringify(rivi), 
+            method: "PUT", 
+            headers: { "Content-type": "application/json ; charset=UTF-8" }
+            })
+        const data = await haeresponse(response)
+        console.log(data)
+        return data
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+}
+
+let async_patch = async (url,rivi,id) => {
+    url = url + "/" + id
+    try {
+        const response = await fetch(url,{
+            body: JSON.stringify(rivi), 
+            method: "PATCH", 
+            headers: { "Content-type": "application/json ; charset=UTF-8" }
+            })
+        const data = await haeresponse(response)
+        console.log(data)
+        return data
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+}
+
+
+let async_delete = async (url,id) => {
+    if (id) url = url + "/" + id
+    try {
+        const response = await fetch(url,{
+            body: JSON.stringify(rivi), 
+            method: "DELETE", 
+            headers: { "Content-type": "application/json" }
+            })
+        const data = await haeresponse(response)
+        console.log(data)
+        return data
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+}
+
+// async_get(url)
+
+// Määritellään funktio datan näyttämiseen
+let displayData = async () => {
+    const data = await async_get(url)
+    const list = document.querySelector('#lista')
+    list.innerHTML = '';
+    data.forEach(item => {
+        const listItem = document.createElement('li');  
+        const span = document.createElement('span')
+        span.textContent = item.content; 
+        listItem.appendChild(span);
+        
+        const editIcon = document.createElement('span');
+        editIcon.addEventListener('click', e => {
+            e.target.previousSibling.contentEditable = true;
+            })
+        editIcon.innerHTML = '<i class="fa fa-edit"></i>'
+        listItem.appendChild(editIcon);
+    
+        const deleteIcon = document.createElement('span');
+        deleteIcon.classList.add('delete');
+        deleteIcon.addEventListener('click', () => {
+            async_delete(url, item.id)
+            displayData()
+            })
+        deleteIcon.innerHTML = '<i class="fa fa-trash"></i>'
+        listItem.appendChild(deleteIcon);
+        
+        list.appendChild(listItem);
+        })
+}
+
+// Kutsutaan displayData-funktiota, kun sivu on valmis
+displayData();
